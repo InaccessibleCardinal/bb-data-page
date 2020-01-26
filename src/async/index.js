@@ -1,5 +1,5 @@
 import axios from 'axios';
-const TEAMS_URL = 'http://localhost:3001/teams';
+const TEAMS_URL = 'http://localhost:3000/teams';
 
 export async function getTeams() {
     try {

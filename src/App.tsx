@@ -1,6 +1,6 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {getTeams, getTeamRoster} from './async/';
-import Team from './interfaces/Team';
+import {getTeams/*, getTeamRoster*/} from './async/';
+// import Team from './interfaces/Team';
 import TeamsMenu from './components/TeamsMenu';
 
 export default function App() : ReactElement {
