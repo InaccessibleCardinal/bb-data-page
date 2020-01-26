@@ -12,8 +12,8 @@ export default function App() : ReactElement {
 
     useEffect(() => {
         dispatch({type: GET_TEAMS});
-        getTeams().then((data) => {
-            dispatch({type: GET_TEAMS_SUCCESS, payload: data.row});
+        getTeams().then((r) => {
+            dispatch({type: GET_TEAMS_SUCCESS, payload: r.data.row});
         }).catch(e => {
             dispatch({type: GET_TEAMS_ERROR});
         });   

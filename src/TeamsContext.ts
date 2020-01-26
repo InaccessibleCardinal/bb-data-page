@@ -6,7 +6,8 @@ export const initialState: TeamsState = {
     loading: false, 
     teams: [], 
     selectedTeam: [],
-    selectedTeamName: '', 
+    selectedTeamName: '',
+    selectedTeamId: '',
     error: null
 };
 

@@ -1,25 +1,26 @@
-import React, {ReactElement, Fragment, useContext} from 'react';
+import React, {ReactElement, Fragment, useContext, Dispatch} from 'react';
 import TeamsContext from '../TeamsContext';
 import Team from '../interfaces/Team';
 import LeagueList from './LeagueList';
+import {AnyAction} from '../interfaces/Action';
 
 type TeamMenuProps = {
-    dispatch: any;
+    dispatch: Dispatch<AnyAction>;
 };
 
 export default function TeamsMenu(props: TeamMenuProps): ReactElement {
     const {dispatch} = props;
-    const ctx = useContext(TeamsContext);
+    const {teams} = useContext(TeamsContext);
     return (
         <div>
             <ul>
-                {splitTeamNamesItems(ctx.teams, dispatch)}
+                {splitTeamNamesItems(teams, dispatch)}
             </ul>
         </div>
     );
 }
 
-function splitTeamNamesItems(teams: Array<Team>, dispatch: any): ReactElement {
+function splitTeamNamesItems(teams: Array<Team>, dispatch: Dispatch<AnyAction>): ReactElement {
     const nl: Team[] = [];
     const al: Team[] = [];
     teams.forEach((team) => {

@@ -6,5 +6,6 @@ export default interface TeamsState {
     teams: Array<Team>;
     selectedTeam: Array<RosterPlayer>;
     selectedTeamName: string;
+    selectedTeamId: string;
     error: null | string;
 };

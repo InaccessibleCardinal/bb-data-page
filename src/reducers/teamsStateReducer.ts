@@ -20,7 +20,7 @@ export default function teamsStateReducer(state: TeamsState, action: AnyAction):
         case GET_SELECTED_TEAM: {
             const selectedTeam = state.teams.find(t => t.team_id === action.payload);
             let name = selectedTeam?.name_display_full || '';
-            return {...state, selectedTeamName: name,  loading: true};
+            return {...state, selectedTeamName: name, selectedTeamId: action.payload, loading: true};
         }
         case GET_SELECTED_TEAM_SUCCESS: {
             return {...state, selectedTeam: action.payload, loading: false};
