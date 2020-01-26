@@ -1,15 +1,45 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, Fragment} from 'react';
 import Team from '../interfaces/Team';
 
 type TeamMenuProps = {
     teams: Array<Team>
 };
 
-function getTeamNamesItems(teams: Array<Team>): Array<ReactElement> {
-    return teams.map((t: Team, i: number) => {
-        const name: string = t.name_display_full;
-        return <li key={i}>{name}</li>
+type LeagueListProps = {
+    league: string, 
+    teams: Array<Team>
+};
+
+function splitTeamNamesItems(teams: Array<Team>): ReactElement {
+    const nl: Team[] = [];
+    const al: Team[] = [];
+    teams.forEach((team) => {
+        if (team.league === 'NL') {
+            nl.push(team);
+        } else {
+            al.push(team);
+        }
     });
+    return (
+        <Fragment>
+            <LeagueList league='National League' teams={nl} />
+            <LeagueList league='American League' teams={al} />
+        </Fragment>
+    );
+}
+
+function LeagueList(props: LeagueListProps): ReactElement {
+    const {league, teams} = props;
+    const items: ReactElement[] = teams.map((t: Team, i: number) => {
+        const {name_display_full, team_id} = t;
+        return <li key={team_id}>{name_display_full}</li>
+    });
+    return (
+        <ul>
+            <li>{league}</li>
+            <ul>{items}</ul>
+        </ul>
+    );
 }
 
 export default function TeamsMenu(props: TeamMenuProps): ReactElement {
@@ -18,7 +48,7 @@ export default function TeamsMenu(props: TeamMenuProps): ReactElement {
     return (
         <div>
             <ul>
-                {getTeamNamesItems(teams)}
+                {splitTeamNamesItems(teams)}
             </ul>
         </div>
     );
