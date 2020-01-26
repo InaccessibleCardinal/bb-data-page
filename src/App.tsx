@@ -1,33 +1,36 @@
-import React, {ReactElement, useEffect, useState} from 'react';
-import {getTeams/*, getTeamRoster*/} from './async/';
-// import Team from './interfaces/Team';
+import React, {ReactElement, useEffect, useReducer} from 'react';
+import TeamsContext, {initialState} from './TeamsContext';
+import teamsStateReducer from './reducers/teamsStateReducer';
+import {getTeams} from './async/';
 import TeamsMenu from './components/TeamsMenu';
+import TeamRoster from './components/TeamRoster';
+import {GET_TEAMS, GET_TEAMS_SUCCESS, GET_TEAMS_ERROR} from './reducers/constants';
 
 export default function App() : ReactElement {
 
-    const [teams, setTeams] = useState([]);
+    const [teamsState, dispatch] = useReducer(teamsStateReducer, initialState);
 
     useEffect(() => {
-        
-        
+        dispatch({type: GET_TEAMS});
         getTeams().then((data) => {
-            setTeams(data.row);
-            // data.row.forEach((team: Team) => {
-            //     getTeamRoster(team.team_id)
-            //     .then((data) => {
-            //         console.log(JSON.stringify(data, null, 4))
-            //     }).catch(e => {
-            //         console.log(e);
-            //     });
-            // });
+            dispatch({type: GET_TEAMS_SUCCESS, payload: data.row});
+        }).catch(e => {
+            dispatch({type: GET_TEAMS_ERROR});
         });   
-
     }, []);
-    const teamsMenuProps = {teams};
+    
     return (
         <div>
-            <h1>testing...</h1>
-            <TeamsMenu {...teamsMenuProps} />
+            <TeamsContext.Provider value={teamsState}>
+                {teamsState.loading && <Loader />}
+                <h1>MLB Data Page</h1>
+                <TeamsMenu dispatch={dispatch} />
+                <TeamRoster />
+            </TeamsContext.Provider>
         </div>
     );
+}
+
+function Loader():ReactElement {
+    return <div><p>Loading...</p></div>;
 }

@@ -1,16 +1,25 @@
-import React, {ReactElement, Fragment} from 'react';
+import React, {ReactElement, Fragment, useContext} from 'react';
+import TeamsContext from '../TeamsContext';
 import Team from '../interfaces/Team';
+import LeagueList from './LeagueList';
 
 type TeamMenuProps = {
-    teams: Array<Team>
+    dispatch: any;
 };
 
-type LeagueListProps = {
-    league: string, 
-    teams: Array<Team>
-};
+export default function TeamsMenu(props: TeamMenuProps): ReactElement {
+    const {dispatch} = props;
+    const ctx = useContext(TeamsContext);
+    return (
+        <div>
+            <ul>
+                {splitTeamNamesItems(ctx.teams, dispatch)}
+            </ul>
+        </div>
+    );
+}
 
-function splitTeamNamesItems(teams: Array<Team>): ReactElement {
+function splitTeamNamesItems(teams: Array<Team>, dispatch: any): ReactElement {
     const nl: Team[] = [];
     const al: Team[] = [];
     teams.forEach((team) => {
@@ -22,34 +31,8 @@ function splitTeamNamesItems(teams: Array<Team>): ReactElement {
     });
     return (
         <Fragment>
-            <LeagueList league='National League' teams={nl} />
-            <LeagueList league='American League' teams={al} />
+            <LeagueList league='National League' teams={nl} dispatch={dispatch} />
+            <LeagueList league='American League' teams={al} dispatch={dispatch} />
         </Fragment>
-    );
-}
-
-function LeagueList(props: LeagueListProps): ReactElement {
-    const {league, teams} = props;
-    const items: ReactElement[] = teams.map((t: Team, i: number) => {
-        const {name_display_full, team_id} = t;
-        return <li key={team_id}>{name_display_full}</li>
-    });
-    return (
-        <ul>
-            <li>{league}</li>
-            <ul>{items}</ul>
-        </ul>
-    );
-}
-
-export default function TeamsMenu(props: TeamMenuProps): ReactElement {
-    console.log('props: ', props);
-    const {teams} = props;
-    return (
-        <div>
-            <ul>
-                {splitTeamNamesItems(teams)}
-            </ul>
-        </div>
     );
 }
