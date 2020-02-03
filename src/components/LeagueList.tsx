@@ -9,7 +9,6 @@ type LeagueListProps = {
     dispatch: Dispatch<AnyAction>;
     league: string; 
     teams: Array<Team>;
-    
 };
 
 export default function LeagueList(props: LeagueListProps): ReactElement {

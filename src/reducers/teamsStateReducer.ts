@@ -6,7 +6,11 @@ import {
     GET_TEAMS_SUCCESS,
     GET_SELECTED_TEAM,
     GET_SELECTED_TEAM_SUCCESS,
-    GET_SELECTED_TEAM_ERROR
+    GET_SELECTED_TEAM_ERROR,
+    GET_SELECTED_PLAYER,
+    GET_SELECTED_PLAYER_SUCCESS,
+    GET_SELECTED_PLAYER_ERROR,
+    TOGGLE_SELECTED_PLAYER_SHOWING
 } from './constants';
 
 export default function teamsStateReducer(state: TeamsState, action: AnyAction): TeamsState {
@@ -24,6 +28,18 @@ export default function teamsStateReducer(state: TeamsState, action: AnyAction):
         }
         case GET_SELECTED_TEAM_SUCCESS: {
             return {...state, selectedTeam: action.payload, loading: false};
+        }
+        case GET_SELECTED_PLAYER: {
+            return {...state, loading: true};
+        }
+        case GET_SELECTED_PLAYER_SUCCESS: {
+            return {...state, selectedPlayer: action.payload, loading: false, selectedPlayerShowing: true};
+        }
+        case GET_SELECTED_PLAYER_ERROR: {
+            return state;
+        }
+        case TOGGLE_SELECTED_PLAYER_SHOWING: {
+            return {...state, selectedPlayerShowing: !state.selectedPlayerShowing};
         }
         case GET_SELECTED_TEAM_ERROR: {
             return state;

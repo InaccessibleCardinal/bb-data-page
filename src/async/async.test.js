@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getTeams, getTeamRoster} from './index';
+import {getTeams, getTeamRoster, getPlayerStats} from './index';
 
 jest.mock('axios');
 
@@ -33,6 +33,23 @@ describe('getTeamRoster function', () => {
     it ('returns an error', () => {
         axios.get.mockImplementationOnce(() => Promise.reject(new Error('403')));
         return getTeamRoster('109').catch(e => {
+            expect(e).toEqual('403');
+        });
+    });
+});
+
+describe('getPlayerStats function', () => {
+    it ('fetches data', () => {
+        const data = {row: {}};
+        axios.get.mockImplementationOnce(() => Promise.resolve(data));
+        return getPlayerStats('12345').then(d => {
+            expect(d).toEqual(data);
+        });
+    });
+
+    it ('returns an error', () => {
+        axios.get.mockImplementationOnce(() => Promise.reject(new Error('403')));
+        return getPlayerStats('12345').catch(e => {
             expect(e).toEqual('403');
         });
     });

@@ -1,12 +1,16 @@
 import {Request, Response} from 'express';
 import axios from 'axios';
+const SVC_URL = 'http://lookup-service-prod.mlb.com/json';
 
-const teamListUrl = `http://lookup-service-prod.mlb.com/json/named.team_all_season.bam?sport_code='mlb'&all_star_sw='N'&sort_order=name_asc&season='2019'`;
+const teamListUrl = `${SVC_URL}/named.team_all_season.bam?sport_code='mlb'&all_star_sw='N'&sort_order=name_asc&season='2019'`;
 function teamUrl(id: string): string {
-    return `http://lookup-service-prod.mlb.com/json/named.roster_40.bam?team_id='${id}'`;
+    return `${SVC_URL}/named.roster_40.bam?team_id='${id}'`;
 }
 function playerDetailsUrl(id: string): string {
-    return `http://lookup-service-prod.mlb.com/json/named.player_info.bam?sport_code='mlb'&player_id='${id}'`
+    return `${SVC_URL}/named.player_info.bam?sport_code='mlb'&player_id='${id}'`;
+}
+function playerBattingStatsUrl(id: string): string {
+    return `${SVC_URL}/named.sport_career_hitting.bam?league_list_id='mlb'&game_type='R'&player_id='${id}'`;
 }
 
 export async function teamListHandler(req: Request, res: Response): Promise<Response> {
@@ -41,4 +45,15 @@ export async function playerDetailsHandler(req: Request, res: Response): Promise
     }
 }
 
-// module.exports = {teamListHandler, teamDetailsHandler, playerDetailsHandler};
+export async function playerBattingStatsHandler(req: Request, res: Response) {
+    //http://lookup-service-prod.mlb.com/json/named.sport_career_hitting.bam?league_list_id='mlb'&game_type='R'&player_id='493316'
+    const {id} = req.params;
+    try {
+        const stats = await axios.get(playerBattingStatsUrl(id)).then(r => r.data.sport_career_hitting.queryResults);
+        return res.status(200).json(stats);
+
+    } catch (e) {
+        console.log('e: ', e)
+        return res.status(500).json({message: 'error fetching player stats'});
+    }
+}

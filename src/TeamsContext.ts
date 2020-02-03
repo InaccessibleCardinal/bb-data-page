@@ -8,6 +8,8 @@ export const initialState: TeamsState = {
     selectedTeam: [],
     selectedTeamName: '',
     selectedTeamId: '',
+    selectedPlayer: null,
+    selectedPlayerShowing: false,
     error: null
 };
 
